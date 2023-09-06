@@ -3,9 +3,66 @@
     <title>RPG</title>
     <script src=https://code.jquery.com/jquery-3.6.0.min.js></script>
     <link href="/css/my.css" rel="stylesheet">
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
 <h1>RPG admin panel</h1>
+<table id="table1">
+    <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Title</th>
+        <th>Race</th>
+        <th>Profession</th>
+        <th>Level</th>
+        <th>Birthday</th>
+        <th>Banned</th>
+    </tr>
+</table>
+<div id="pages">Pages:</div>
+<script>
+    let url = "/rest/players"
+    $.get(url, function (dat) {
+        $.each(dat, function (index, element) {
+            $("<tr>").html("<td>"
+                + element.id + "</td><td>"
+                + element.name + "</td><td>"
+                + element.title + "</td><td>"
+                + element.race + "</td><td>"
+                + element.profession + "</td><td>"
+                + element.level + "</td><td>"
+                + new Date(element.birthday).getDay()
+                + "/" + new Date(element.birthday).getMonth()
+                + "/" + new Date(element.birthday).getFullYear() + "</td><td>"
+                + element.banned + "</td>"
+            ).appendTo("#table1");
+        });
+    });
+    let allPlayer = allPlayers();
+    let countPages = Math.ceil(allPlayer / 3);
+    console.log(allPlayer + " : " + countPages);
+    for (let i = 0; i < countPages; i++) {
+        console.log(allPlayer + " : " + countPages)
+        let button = "<button>" + i + "</button>";
+        $("#pages").append(button);
+    }
+
+    function allPlayers() {
+        let url = "/rest/players/count";
+        let res = 2;
+        $.get(url,function (data){
+            res = parseInt(data);
+        })
+
+        console.log(res);
+        return res;
+    }
+
+</script>
 
 </body>
 </html>
